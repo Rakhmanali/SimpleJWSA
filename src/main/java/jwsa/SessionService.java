@@ -11,8 +11,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
@@ -129,7 +127,7 @@ public class SessionService {
 
             return stringWriter.toString();
         } catch (Exception ex) {
-
+            System.out.println(ex.toString());
         }
         return null;
     }
@@ -170,7 +168,7 @@ public class SessionService {
     }
 
     public String send(HttpMethod httpMethod) {
-        String result = null;
+        String result;
 
         if (httpMethod == HttpMethod.GET) {
             String queryString = this.createQueryString();
@@ -186,28 +184,72 @@ public class SessionService {
     private String createQueryString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(Constants.WS_LOGIN + "=" + Base64.getEncoder().encodeToString(this.login.getBytes(StandardCharsets.UTF_8)));
-        sb.append("&" + Constants.WS_PASSWORD + "=" + Base64.getEncoder().encodeToString(this.password.getBytes(StandardCharsets.UTF_8)));
-        sb.append("&" + Constants.WS_IS_ENCODED + "=1");
-        sb.append("&" + Constants.WS_IS_TOKEN + "=1");
+        //sb.append(Constants.WS_LOGIN + "=" + Base64.getEncoder().encodeToString(this.login.getBytes(StandardCharsets.UTF_8)));
+        sb.append(Constants.WS_LOGIN)
+                .append("=")
+                .append(Base64.getEncoder().encodeToString(this.login.getBytes(StandardCharsets.UTF_8)));
+
+        //sb.append("&" + Constants.WS_PASSWORD + "=" + Base64.getEncoder().encodeToString(this.password.getBytes(StandardCharsets.UTF_8)));
+        sb.append("&")
+                .append(Constants.WS_PASSWORD)
+                .append("=")
+                .append(Base64.getEncoder().encodeToString(this.password.getBytes(StandardCharsets.UTF_8)));
+
+        //sb.append("&" + Constants.WS_IS_ENCODED + "=1");
+        sb.append("&")
+                .append(Constants.WS_IS_ENCODED)
+                .append("=1");
+
+        //sb.append("&" + Constants.WS_IS_TOKEN + "=1");
+        sb.append("&")
+                .append(Constants.WS_IS_TOKEN)
+                .append("=1");
 
         if (this.isEncrypted == true) {
-            sb.append("&" + Constants.WS_IS_ENCRYPT + "=1");
+            //sb.append("&" + Constants.WS_IS_ENCRYPT + "=1");
+            sb.append("&")
+                    .append(Constants.WS_IS_ENCRYPT)
+                    .append("=1");
         } else {
-            sb.append("&" + Constants.WS_IS_ENCRYPT + "=0");
+            //sb.append("&" + Constants.WS_IS_ENCRYPT + "=0");
+            sb.append("&")
+                    .append(Constants.WS_IS_ENCRYPT)
+                    .append("=0");
         }
 
-        sb.append("&" + Constants.WS_TIMEOUT + "=20");
-        sb.append("&" + Constants.WS_APP_ID + "=" + Integer.toString(this.appId));
+        //sb.append("&" + Constants.WS_TIMEOUT + "=20");
+        sb.append("&")
+                .append(Constants.WS_TIMEOUT)
+                .append("=20");
+
+        //sb.append("&" + Constants.WS_APP_ID + "=" + Integer.toString(this.appId));
+        sb.append("&")
+                .append(Constants.WS_APP_ID)
+                .append("=")
+                .append(Integer.toString(this.appId));
+
+
         if (this.appVersion != null && this.appVersion.isEmpty() != true && this.appVersion.isBlank() != true) {
-            sb.append("&" + Constants.WS_APP_VERSION + "=" + this.appVersion);
+            //sb.append("&" + Constants.WS_APP_VERSION + "=" + this.appVersion);
+            sb.append("&")
+                    .append(Constants.WS_APP_VERSION)
+                    .append("=")
+                    .append(this.appVersion);
         }
 
         if (this.domain != null && this.domain.isEmpty() != true && this.domain.isBlank() != true) {
-            sb.append("&" + Constants.WS_DOMAIN + "=" + this.domain);
+            //sb.append("&" + Constants.WS_DOMAIN + "=" + this.domain);
+            sb.append("&")
+                    .append(Constants.WS_DOMAIN)
+                    .append("=")
+                    .append(this.domain);
         }
 
-        sb.append("&" + Constants.WS_RETURN_TYPE + "=" + Constants.WS_RETURN_TYPE_XML);
+        //sb.append("&" + Constants.WS_RETURN_TYPE + "=" + Constants.WS_RETURN_TYPE_XML);
+        sb.append("&")
+                .append(Constants.WS_RETURN_TYPE)
+                .append("=")
+                .append(Constants.WS_RETURN_TYPE_XML);
 
         return sb.toString();
     }

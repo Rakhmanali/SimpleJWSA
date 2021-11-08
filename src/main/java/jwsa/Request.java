@@ -21,6 +21,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class Request {
     protected String serviceAddress;
@@ -299,9 +300,6 @@ public class Request {
 
     public String createXmlRoutine() throws ParserConfigurationException,
             TransformerException {
-        String result = "";
-        StringBuilder sb = new StringBuilder();
-
         var documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance().newInstance();
         var documentBuilder = documentBuilderFactory.newDocumentBuilder();
         var xmlRequestDocument = documentBuilder.newDocument();
@@ -321,9 +319,6 @@ public class Request {
 
     public String createXmlRoutine(RoutineType routineType) throws ParserConfigurationException,
             TransformerException {
-        String result = "";
-        StringBuilder sb = new StringBuilder();
-
         var documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance().newInstance();
         var documentBuilder = documentBuilderFactory.newDocumentBuilder();
         var xmlRequestDocument = documentBuilder.newDocument();
@@ -342,7 +337,7 @@ public class Request {
     }
 
     protected Object get(String requestString) throws Exception {
-        String requestUri = String.format(this.format, this.serviceAddress, this.route, this.token, URLEncoder.encode(requestString,"UTF-8"));
+        String requestUri = String.format(this.format, this.serviceAddress, this.route, this.token, URLEncoder.encode(requestString, StandardCharsets.UTF_8));
         return this.httpService.get(requestUri, this.proxy, this.command.getReturnCompressionType());
     }
 

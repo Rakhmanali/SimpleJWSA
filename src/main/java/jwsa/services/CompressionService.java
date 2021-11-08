@@ -13,7 +13,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class CompressionService implements ICompressionService  {
     public byte[] compress(String source, CompressionType compressionType){
-        byte[] result = null;
+        byte[] result;
 
         switch (compressionType)
         {
@@ -35,7 +35,7 @@ public class CompressionService implements ICompressionService  {
 
     public byte[] decompress(byte[] bytes, CompressionType compressionType)
     {
-        byte[] result = null;
+        byte[] result;
 
         switch (compressionType)
         {

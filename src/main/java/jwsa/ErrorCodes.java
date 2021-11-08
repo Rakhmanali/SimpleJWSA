@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ErrorCodes {
-    final public static Map<String, String> collection = new HashMap<String, String>() {
+    final public static Map<String, String> collection = new HashMap<>() {
         {
             put("MI001", "Service function name is empty");
             put("MI002", "Login or password is empty or wrong");

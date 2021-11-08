@@ -40,9 +40,9 @@ public enum PgsqlDbType {
     Jsonb(36),
     Hstore(37);
 
-    private int value;
+    final int value;
 
-    private PgsqlDbType(int value) {
+    PgsqlDbType(int value) {
         this.value = value;
     }
 

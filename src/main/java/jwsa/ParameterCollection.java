@@ -69,7 +69,7 @@ public class ParameterCollection implements Iterable<Parameter> {
 
         Parameter oldValue = this.internalList.get(index);
 
-        if (value.getName() != oldValue.getName()) {
+        if (value.getName().equals(oldValue.getName()) == false) {
             this.invalidateHashLookups();
         }
 
@@ -83,7 +83,7 @@ public class ParameterCollection implements Iterable<Parameter> {
         // Using a dictionary is much faster for 5 or more items
         if (this.internalList.size() >= 5) {
             if (this.lookup == null) {
-                this.lookup = new HashMap<String, Integer>();
+                this.lookup = new HashMap<>();
                 for (scanIndex = 0; scanIndex < this.internalList.size(); scanIndex++) {
                     var item = this.internalList.get(scanIndex);
                     if (!this.lookup.containsKey(item.getName())) {
@@ -99,7 +99,7 @@ public class ParameterCollection implements Iterable<Parameter> {
 
             // Case sensitive lookup failed, generate a case insensitive lookup
             if (this.lookupIgnoreCase == null) {
-                this.lookupIgnoreCase = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
+                this.lookupIgnoreCase = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                 for (scanIndex = 0; scanIndex < this.internalList.size(); scanIndex++) {
                     var item = this.internalList.get(scanIndex);
 
@@ -135,7 +135,7 @@ public class ParameterCollection implements Iterable<Parameter> {
         for (; scanIndex < this.internalList.size(); scanIndex++) {
             var item = this.internalList.get(scanIndex);
 
-            if (item.getName() == parameterName) {
+            if (item.getName().equals(parameterName)) {
                 return scanIndex;
             }
         }

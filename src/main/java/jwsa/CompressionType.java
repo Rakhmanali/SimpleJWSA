@@ -4,9 +4,9 @@ public enum CompressionType {
     NONE(0),
     GZip(2);
 
-    private int value;
+     final int value;
 
-    private CompressionType(int value) {
+    CompressionType(int value) {
         this.value = value;
     }
 

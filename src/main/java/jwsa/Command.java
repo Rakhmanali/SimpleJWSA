@@ -175,7 +175,7 @@ public class Command {
                     Object result = scalarRequest.Send();
                     return String.valueOf(result);
                 } catch (RestServiceException ex) {
-                    if (ex.getCode() == "MI008") {
+                    if (ex.getCode().equals("MI008")) {
                         SessionContext.refresh();
                         scalarRequest.setToken(SessionContext.getToken());
 
@@ -206,7 +206,7 @@ public class Command {
                     Object result = nonqueryRequest.Send();
                     return String.valueOf(result);
                 } catch (RestServiceException ex) {
-                    if (ex.getCode() == "MI008") {
+                    if (ex.getCode().equals("MI008")) {
                         SessionContext.refresh();
                         nonqueryRequest.setToken(SessionContext.getToken());
 
@@ -237,7 +237,7 @@ public class Command {
                     Object result = dataSetRequest.Send();
                     return String.valueOf(result);
                 } catch (RestServiceException ex) {
-                    if (ex.getCode() == "MI008") {
+                    if (ex.getCode().equals("MI008")) {
                         SessionContext.refresh();
                         dataSetRequest.setToken(SessionContext.getToken());
 
@@ -328,7 +328,7 @@ public class Command {
                         outgoingCompressionType,
                         returnCompressionType);
             } catch (RestServiceException ex) {
-                if (ex.getCode() == "MI008") {
+                if (ex.getCode().equals("MI008")) {
                     SessionContext.refresh();
 
                     count++;

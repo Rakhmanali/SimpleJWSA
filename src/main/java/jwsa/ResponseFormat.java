@@ -4,9 +4,9 @@ public enum ResponseFormat {
     XML(1),
     JSON(2);
 
-    private int value;
+    final int value;
 
-    private ResponseFormat(int value) {
+    ResponseFormat(int value) {
         this.value = value;
     }
 

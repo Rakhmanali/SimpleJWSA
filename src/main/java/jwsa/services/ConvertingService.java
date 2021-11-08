@@ -16,11 +16,11 @@ import java.util.*;
 public class ConvertingService implements IConvertingService {
 
     private Object ConvertScalarObjectToDb(PgsqlDbType pgsqlDbType, Object value, EncodingType outgoingEncodingType) {
-        Object result = null;
-
         if (value == null) {
-            return result;
+            return null;
         }
+
+        Object result;
 
         switch (pgsqlDbType) {
             case Time: {
@@ -103,11 +103,11 @@ public class ConvertingService implements IConvertingService {
     }
 
     public Object[] ConvertObjectToDb(PgsqlDbType pgsqlDbType, boolean isArray, Object value, EncodingType outgoingEncodingType) {
-        Object[] result = null;
-
         if (value == null) {
-            return result;
+            return null;
         }
+
+        Object[] result;
 
         if (isArray == false) {
             result = new Object[1];

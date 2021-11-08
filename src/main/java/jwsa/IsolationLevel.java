@@ -39,9 +39,9 @@ public enum IsolationLevel {
     //     see changes made in other transactions, even if you requery.
     Snapshot (16777216);
 
-    private int value;
+    final int value;
 
-    private IsolationLevel(int value) {
+    IsolationLevel(int value) {
         this.value = value;
     }
 
