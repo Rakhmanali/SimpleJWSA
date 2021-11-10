@@ -1,5 +1,5 @@
 import jwsa.*;
-import jwsa.services.HttpMethod;
+import jwsa.HttpMethod;
 
 public class Main {
 
@@ -12,7 +12,13 @@ public class Main {
                 "244",
                 "upstairstest",
                 null);
-        session.createByRestServiceAddress("https://webservice.test.naiton.com");
+
+        //session.createByRestServiceAddress("https://webservice.test.naiton.com");
+        try {
+            session.createByConnectionProviderAddress("https://connectionprovider.naiton.com");
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
 
         Command command = new Command("companymanager_getresellers");
         command.getParameters().Add("_businessid", PgsqlDbType.Integer, 1);

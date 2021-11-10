@@ -1,7 +1,6 @@
 package jwsa;
 
 import jwsa.internal.Constants;
-import jwsa.services.HttpMethod;
 import org.apache.hc.core5.http.HttpHost;
 
 public class SessionContext {
@@ -73,7 +72,7 @@ public class SessionContext {
         return token;
     }
 
-    public static void refresh() {
+    public static void refresh() throws Exception {
         String requestUri = SessionContext.route + Constants.WS_INITIALIZE_SESSION;
         SessionService sessionService = new SessionService(getRestServiceAddress(),
                 requestUri,

@@ -1,7 +1,6 @@
 package jwsa;
 
 import jwsa.internal.Constants;
-import jwsa.services.HttpMethod;
 import jwsa.services.HttpService;
 import jwsa.services.IConvertingService;
 import jwsa.services.IHttpService;
@@ -23,7 +22,7 @@ import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class Request {
+public class Request implements IRequest {
     protected String serviceAddress;
     protected String route;
     protected String token;
@@ -69,7 +68,7 @@ public class Request {
         String parameterName;
         for (Parameter parameter : command.getParameters()) {
             parameterName = parameter.getName().toLowerCase();
-            value = convertingService.ConvertObjectToDb(parameter.getPgsqlDbType(), parameter.isArray(), parameter.getValue(),
+            value = convertingService.convertObjectToDb(parameter.getPgsqlDbType(), parameter.isArray(), parameter.getValue(),
                     command.getOutgoingEncodingType());
             if (value == null || value.length == 0) {
                 var parameterNameElement = xmlRequestDocument.createElement(parameterName);
@@ -116,7 +115,7 @@ public class Request {
                         int encodingType = command.getOutgoingEncodingType().ordinal();
                         String encodedValue;
                         for (Object v : value) {
-                            encodedValue = convertingService.EncodeTo(v, command.getOutgoingEncodingType());
+                            encodedValue = convertingService.encodeTo(v, command.getOutgoingEncodingType());
                             var parameterNameElement = xmlRequestDocument.createElement(parameterName);
                             if (encodedValue.trim().length() > 0) {
                                 parameterNameElement.setAttribute(Constants.WS_XML_REQUEST_ATTRIBUTE_ENCODING, Integer.toString(encodingType));
@@ -250,7 +249,7 @@ public class Request {
         return routineElement;
     }
 
-    public String createXmlRequest() {
+    private String createXmlRequest() {
         try {
             var documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance().newInstance();
             var documentBuilder = documentBuilderFactory.newDocumentBuilder();

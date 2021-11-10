@@ -6,16 +6,13 @@ import jwsa.PgsqlDbType;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ConvertingService implements IConvertingService {
 
-    private Object ConvertScalarObjectToDb(PgsqlDbType pgsqlDbType, Object value, EncodingType outgoingEncodingType) {
+    private Object convertScalarObjectToDb(PgsqlDbType pgsqlDbType, Object value, EncodingType outgoingEncodingType) {
         if (value == null) {
             return null;
         }
@@ -24,55 +21,58 @@ public class ConvertingService implements IConvertingService {
 
         switch (pgsqlDbType) {
             case Time: {
-                java.time.LocalTime localTime = (java.time.LocalTime) value;
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                java.time.LocalTime localTime = (LocalTime) value;
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
                 result = localTime.format(dateTimeFormatter);
                 break;
             }
             case TimeTZ: {
                 OffsetTime offsetTime = (OffsetTime) value;
-                result = offsetTime.toString();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME;
+                result = offsetTime.format(dateTimeFormatter);
                 break;
             }
             case Timestamp: {
                 LocalDateTime localDateTime = (LocalDateTime) value;
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
                 result = localDateTime.format(dateTimeFormatter);
                 break;
             }
             case TimestampTZ: {
                 OffsetDateTime offsetDateTime = (OffsetDateTime) value;
-                result = offsetDateTime.toString();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+                result = offsetDateTime.format(dateTimeFormatter);
                 break;
             }
             case Date: {
                 LocalDate localDate = (LocalDate) value;
-                result = localDate.toString();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+                result = localDate.format(dateTimeFormatter);
                 break;
             }
             case Bigint: {
-                result = (long) value;
+                result = Long.parseLong(value.toString());
                 break;
             }
             case Smallint: {
-                result = (short) value;
+                result = Short.parseShort(value.toString());
                 break;
             }
             case Integer: {
-                result = (int) value;
+                result = Integer.parseInt(value.toString());
                 break;
             }
             case Real: {
-                result = (float) value;
+                result = Float.parseFloat(value.toString());
                 break;
             }
             case Double: {
-                result = (double) value;
+                result = Double.parseDouble(value.toString());
                 break;
             }
             case Money:
             case Numeric: {
-                result = (BigDecimal) value;
+                result = new BigDecimal(value.toString());
                 break;
             }
             case Varchar:
@@ -80,8 +80,7 @@ public class ConvertingService implements IConvertingService {
             case Xml:
             case Json:
             case Jsonb: {
-                //string t = Convert.ToString(value, CultureInfo.InvariantCulture).SparseString();
-                String t = (String) value;
+                String t = value.toString();
                 if (t.isEmpty() == false && t.isBlank() == false && outgoingEncodingType == EncodingType.NONE) {
                     t = "<![CDATA[" + t + "]]>";
                 }
@@ -102,7 +101,7 @@ public class ConvertingService implements IConvertingService {
         return result;
     }
 
-    public Object[] ConvertObjectToDb(PgsqlDbType pgsqlDbType, boolean isArray, Object value, EncodingType outgoingEncodingType) {
+    public Object[] convertObjectToDb(PgsqlDbType pgsqlDbType, boolean isArray, Object value, EncodingType outgoingEncodingType) {
         if (value == null) {
             return null;
         }
@@ -111,7 +110,7 @@ public class ConvertingService implements IConvertingService {
 
         if (isArray == false) {
             result = new Object[1];
-            result[0] = this.ConvertScalarObjectToDb(pgsqlDbType, value, outgoingEncodingType);
+            result[0] = this.convertScalarObjectToDb(pgsqlDbType, value, outgoingEncodingType);
             return result;
         }
 
@@ -124,7 +123,7 @@ public class ConvertingService implements IConvertingService {
         if (result.length > 0) {
             for (int i = 0; i < result.length; i++) {
                 if (result[i] != null) {
-                    result[i] = this.ConvertScalarObjectToDb(pgsqlDbType, result[i], outgoingEncodingType);
+                    result[i] = this.convertScalarObjectToDb(pgsqlDbType, result[i], outgoingEncodingType);
                 }
             }
         }
@@ -132,7 +131,7 @@ public class ConvertingService implements IConvertingService {
         return result;
     }
 
-    public String EncodeTo(Object value, EncodingType outgoingEncodingType) {
+    public String encodeTo(Object value, EncodingType outgoingEncodingType) {
         if (value == null) {
             value = "null";
         }

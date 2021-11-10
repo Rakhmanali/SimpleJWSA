@@ -1,7 +1,6 @@
 package jwsa;
 
 import jwsa.internal.Constants;
-import jwsa.services.HttpMethod;
 import jwsa.services.HttpService;
 import jwsa.services.IHttpService;
 import org.apache.hc.core5.http.HttpHost;
@@ -134,28 +133,16 @@ public class SessionService {
 
     private final IHttpService httpService = new HttpService();
 
-    private String get(String baseAddress, String requestUri, String queryString, HttpHost proxy) {
+    private String get(String baseAddress, String requestUri, String queryString, HttpHost proxy) throws Exception {
         String query = baseAddress + requestUri + "?" + queryString;
-        try {
-            String result = this.httpService.get(query, proxy, CompressionType.NONE);
-            return this.extractToken(result);
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }
-
-        return null;
+        String result = this.httpService.get(query, proxy, CompressionType.NONE);
+        return this.extractToken(result);
     }
 
-    private String post(String baseAddress, String requestUri, String queryString, HttpHost proxy) {
+    private String post(String baseAddress, String requestUri, String queryString, HttpHost proxy) throws Exception {
         String query = baseAddress + requestUri;
-        try {
-            String result = this.httpService.post(query, queryString, proxy, CompressionType.NONE, CompressionType.NONE);
-            return this.extractToken(result);
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }
-
-        return null;
+        String result = this.httpService.post(query, queryString, proxy, CompressionType.NONE, CompressionType.NONE);
+        return this.extractToken(result);
     }
 
     private final String TOKEN_START = "<" + Constants.WS_TOKEN + ">";
@@ -167,7 +154,7 @@ public class SessionService {
         return source.substring(startIndex, endIndex);
     }
 
-    public String send(HttpMethod httpMethod) {
+    public String send(HttpMethod httpMethod) throws Exception {
         String result;
 
         if (httpMethod == HttpMethod.GET) {

@@ -1,6 +1,5 @@
 package jwsa;
 
-import jwsa.services.HttpMethod;
 import jwsa.services.IConvertingService;
 import org.apache.hc.core5.http.HttpHost;
 
