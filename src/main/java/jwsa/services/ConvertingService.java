@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class ConvertingService implements IConvertingService {
@@ -34,13 +35,42 @@ public class ConvertingService implements IConvertingService {
             }
             case Timestamp: {
                 LocalDateTime localDateTime = (LocalDateTime) value;
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+                // new web service uses the npgsql version 5 and higher
+                // and the following DateTimeFormatter is relevant
+                //DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+                // the current version of the web service uses the npgsql version 2.2.7 and
+                // the DataTimeFormatter created like the following is right yet
+                DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+                        .parseCaseInsensitive()
+                        .append(DateTimeFormatter.ISO_LOCAL_DATE)
+                        .appendLiteral(' ')
+                        .append(DateTimeFormatter.ISO_LOCAL_TIME)
+                        .toFormatter();
+
                 result = localDateTime.format(dateTimeFormatter);
                 break;
             }
             case TimestampTZ: {
                 OffsetDateTime offsetDateTime = (OffsetDateTime) value;
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+                // new web service uses the npgsql version 5 and higher
+                // and the following DateTimeFormatter is relevant
+                // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+                // the current version of the web service uses the npgsql version 2.2.7 and
+                // the DataTimeFormatter created like the following is right yet
+                DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+                        .parseCaseInsensitive()
+                        .append(DateTimeFormatter.ISO_LOCAL_DATE)
+                        .appendLiteral(' ')
+                        .append(DateTimeFormatter.ISO_LOCAL_TIME)
+                        .parseLenient()
+                        .appendOffsetId()
+                        .parseStrict()
+                        .toFormatter();
+
                 result = offsetDateTime.format(dateTimeFormatter);
                 break;
             }
@@ -80,11 +110,10 @@ public class ConvertingService implements IConvertingService {
             case Xml:
             case Json:
             case Jsonb: {
-                String t = value.toString();
-                if (t.isEmpty() == false && t.isBlank() == false && outgoingEncodingType == EncodingType.NONE) {
-                    t = "<![CDATA[" + t + "]]>";
-                }
-                result = t;
+
+                // the plain text is going to be put to the CDATA section
+                // in the writeArguments(...) method of the Request class
+                result = value.toString();
 
                 break;
             }
@@ -100,6 +129,7 @@ public class ConvertingService implements IConvertingService {
 
         return result;
     }
+
 
     public Object[] convertObjectToDb(PgsqlDbType pgsqlDbType, boolean isArray, Object value, EncodingType outgoingEncodingType) {
         if (value == null) {

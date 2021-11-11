@@ -17,29 +17,34 @@ public class ParameterCollection implements Iterable<Parameter> {
         lookupIgnoreCase = null;
     }
 
-    public Parameter Add(Parameter parameter) {
+    public Parameter add(Parameter parameter) {
         this.internalList.add(parameter);
         return parameter;
     }
 
-    public Parameter Add(String name) {
+    public Parameter add(String name) {
         Parameter parameter = new Parameter(name);
-        return this.Add(parameter);
+        return this.add(parameter);
     }
 
-    public Parameter Add(String name, PgsqlDbType pgsqlDbType) {
+    public Parameter add(String name, PgsqlDbType pgsqlDbType) {
         Parameter parameter = new Parameter(name, pgsqlDbType);
-        return this.Add(parameter);
+        return this.add(parameter);
     }
 
-    public Parameter Add(String name, PgsqlDbType pgsqlDbType, Object value) {
+    public Parameter add(String name, PgsqlDbType pgsqlDbType, boolean isArray) {
+        Parameter parameter = new Parameter(name, pgsqlDbType, isArray);
+        return this.add(parameter);
+    }
+
+    public Parameter add(String name, PgsqlDbType pgsqlDbType, Object value) {
         Parameter parameter = new Parameter(name, pgsqlDbType, value);
-        return this.Add(parameter);
+        return this.add(parameter);
     }
 
-    public Parameter Add(String name, PgsqlDbType pgsqlDbType, Object value, boolean isArray) {
-        Parameter parameter = new Parameter(name, pgsqlDbType, value, isArray);
-        return this.Add(parameter);
+    public Parameter add(String name, PgsqlDbType pgsqlDbType, boolean isArray, Object value) {
+        Parameter parameter = new Parameter(name, pgsqlDbType, isArray, value);
+        return this.add(parameter);
     }
 
     public int getCount() {

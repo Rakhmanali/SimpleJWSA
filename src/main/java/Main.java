@@ -1,5 +1,4 @@
 import jwsa.*;
-import jwsa.HttpMethod;
 
 public class Main {
 
@@ -13,27 +12,37 @@ public class Main {
                 "upstairstest",
                 null);
 
-        //session.createByRestServiceAddress("https://webservice.test.naiton.com");
+
         try {
             session.createByConnectionProviderAddress("https://connectionprovider.naiton.com");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
-        Command command = new Command("companymanager_getresellers");
-        command.getParameters().Add("_businessid", PgsqlDbType.Integer, 1);
-        command.getParameters().Add("_companyid", PgsqlDbType.Integer, 13);
-        command.setWriteSchema(WriteSchema.TRUE);
-        try {
-            String xmlResult = Command.execute(command,
-                    RoutineType.DataSet,
-                    HttpMethod.GET,
-                    ResponseFormat.JSON,
-                    CompressionType.NONE,
-                    CompressionType.NONE);
-            System.out.println(xmlResult);
-        }catch(Exception ex){
-            System.out.println(ex.toString());
-        }
+//        Command command = new Command("companymanager_getresellers");
+//        command.getParameters().add("_businessid", PgsqlDbType.Integer, false, 1);
+//        command.getParameters().add("_companyid", PgsqlDbType.Integer, false, 13);
+//        command.setWriteSchema(WriteSchema.TRUE);
+//        try {
+//            String xmlResult = Command.execute(command,
+//                    RoutineType.DataSet,
+//                    HttpMethod.GET,
+//                    ResponseFormat.JSON,
+//                    CompressionType.NONE,
+//                    CompressionType.NONE);
+//            System.out.println(xmlResult);
+//        } catch (Exception ex) {
+//            System.out.println(ex.toString());
+//        }
+
+        DataSetExample dataSetExample=new DataSetExample();
+        dataSetExample.runTest1();
+
+//        NonQueryExample nonQueryExample=new NonQueryExample();
+//        nonQueryExample.runTest1();
+
+//        ScalarExample scalarExample = new ScalarExample();
+//        scalarExample.runTest2();
+
     }
 }

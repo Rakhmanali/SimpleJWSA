@@ -15,17 +15,23 @@ public class Parameter {
         this.pgsqlDbType = pgsqlDbType;
     }
 
+    public Parameter(String name, PgsqlDbType pgsqlDbType, boolean isArray) {
+        this.name = name;
+        this.pgsqlDbType = pgsqlDbType;
+        this.isArray = isArray;
+    }
+
     public Parameter(String name, PgsqlDbType pgsqlDbType, Object value) {
         this.name = name;
         this.pgsqlDbType = pgsqlDbType;
         this.value = value;
     }
 
-    public Parameter(String name, PgsqlDbType pgsqlDbType, Object value, boolean isArray) {
+    public Parameter(String name, PgsqlDbType pgsqlDbType,  boolean isArray, Object value) {
         this.name = name;
         this.pgsqlDbType = pgsqlDbType;
-        this.value = value;
         this.isArray = isArray;
+        this.value = value;
     }
 
     public String getName() {

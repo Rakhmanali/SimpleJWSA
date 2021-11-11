@@ -45,6 +45,10 @@ public class Command {
         return outgoingCompressionType;
     }
 
+    public void setOutgoingEncodingType(EncodingType outgoingEncodingType) {
+        this.outgoingEncodingType = outgoingEncodingType;
+    }
+
     private CompressionType returnCompressionType = CompressionType.NONE;
 
     public CompressionType getReturnCompressionType() {

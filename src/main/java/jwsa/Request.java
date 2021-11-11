@@ -76,25 +76,14 @@ public class Request implements IRequest {
                 argumentsElement.appendChild((parameterNameElement));
             } else {
                 if (command.getOutgoingEncodingType() == EncodingType.NONE) {
-            /*
-               if outgoingEncodingType == EncodingType.NONE and value is string family object then
-               the function ConvertObjectToDb() "converts" it to something like
-
-               <![CDATA[ ... ]]>
-
-               but the XmlWriter converts special symbols to the "safe" for XML, for example, it
-               converts "<" to "&lt;"
-
-               To prevent it here we need some additional code and using
-               WriteRaw method of XmlWriter
-            */
                     if (this.isEncodingAllowedType(parameter.getPgsqlDbType()) == true) {
                         for (Object v : value) {
                             var parameterNameElement = xmlRequestDocument.createElement(parameterName);
                             if (v == null) {
                                 parameterNameElement.setTextContent(Constants.STRING_NULL);
                             } else {
-                                Text text = xmlRequestDocument.createTextNode(String.valueOf(v));
+                                // the plain text is going to be put to the CDATA section
+                                Text text = xmlRequestDocument.createCDATASection(String.valueOf(v));
                                 parameterNameElement.appendChild(text);
                             }
                             argumentsElement.appendChild(parameterNameElement);
@@ -336,7 +325,11 @@ public class Request implements IRequest {
     }
 
     protected Object get(String requestString) throws Exception {
-        String requestUri = String.format(this.format, this.serviceAddress, this.route, this.token, URLEncoder.encode(requestString, StandardCharsets.UTF_8));
+        // https://stackoverflow.com/questions/4737841/urlencoder-not-able-to-translate-space-character
+        // URLEncoder not able to translate space character
+        String encodedRequestString =URLEncoder.encode(requestString, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+
+        String requestUri = String.format(this.format, this.serviceAddress, this.route, this.token, encodedRequestString);
         return this.httpService.get(requestUri, this.proxy, this.command.getReturnCompressionType());
     }
 

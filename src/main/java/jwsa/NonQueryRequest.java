@@ -3,6 +3,9 @@ package jwsa;
 import jwsa.services.IConvertingService;
 import org.apache.hc.core5.http.HttpHost;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 public final class NonQueryRequest extends Request {
     private final static String getFormat = "%s%sexecutenonquery?token=%s&value=%s";
     private final static String postFormat = "%s%sexecutenonquerypost?token=%s&compression=%s";

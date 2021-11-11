@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class ConvertingServiceTest {
     ConvertingService convertingService = new ConvertingService();
 
@@ -86,7 +85,7 @@ public class ConvertingServiceTest {
         LocalDateTime dateTime = LocalDateTime.of(2021, 8, 26, 23, 51, 35);
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.Timestamp, false, dateTime, EncodingType.NONE);
 
-        Assert.assertEquals("2021-08-26T23:51:35", objects[0]);
+        Assert.assertEquals("2021-08-26 23:51:35", objects[0]);
     }
 
     @Test
@@ -95,7 +94,7 @@ public class ConvertingServiceTest {
         LocalDateTime dateTime = LocalDateTime.of(2021, 8, 26, 23, 51, 35, 456000000);
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.Timestamp, false, dateTime, EncodingType.NONE);
 
-        Assert.assertEquals("2021-08-26T23:51:35.456", objects[0]);
+        Assert.assertEquals("2021-08-26 23:51:35.456", objects[0]);
     }
 
     @Test
@@ -114,7 +113,7 @@ public class ConvertingServiceTest {
 
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.Timestamp, true, localDateTimeList.toArray(), EncodingType.NONE);
 
-        Object[] expecteds = Arrays.asList("2021-08-26T23:51:35", "2020-07-25T22:50:34", "2019-06-24T21:49:33").toArray();
+        Object[] expecteds = Arrays.asList("2021-08-26 23:51:35", "2020-07-25 22:50:34", "2019-06-24 21:49:33").toArray();
         Assert.assertArrayEquals(expecteds, objects);
     }
 
@@ -126,7 +125,7 @@ public class ConvertingServiceTest {
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2021, 8, 26, 18, 51, 35, 0, ZoneOffset.of("+5"));
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.TimestampTZ, false, offsetDateTime, EncodingType.NONE);
 
-        Assert.assertEquals("2021-08-26T18:51:35+05:00", objects[0]);
+        Assert.assertEquals("2021-08-26 18:51:35+05:00", objects[0]);
     }
 
     @Test
@@ -135,7 +134,7 @@ public class ConvertingServiceTest {
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2021, 8, 26, 18, 51, 35, 456000000, ZoneOffset.of("+5"));
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.TimestampTZ, false, offsetDateTime, EncodingType.NONE);
 
-        Assert.assertEquals("2021-08-26T18:51:35.456+05:00", objects[0]);
+        Assert.assertEquals("2021-08-26 18:51:35.456+05:00", objects[0]);
     }
 
     @Test
@@ -154,7 +153,7 @@ public class ConvertingServiceTest {
 
         Object[] objects = convertingService.convertObjectToDb(PgsqlDbType.TimestampTZ, true, offsetDateTimeList.toArray(), EncodingType.NONE);
 
-        Object[] expecteds = Arrays.asList("2021-08-26T23:51:35.456+05:00", "2020-07-25T22:50:34.455+04:00", "2019-06-24T21:49:33.454+03:00").toArray();
+        Object[] expecteds = Arrays.asList("2021-08-26 23:51:35.456+05:00", "2020-07-25 22:50:34.455+04:00", "2019-06-24 21:49:33.454+03:00").toArray();
         Assert.assertArrayEquals(expecteds, objects);
     }
 
