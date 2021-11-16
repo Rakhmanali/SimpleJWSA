@@ -1,15 +1,13 @@
-import jwsa.*;
-import jwsa.exceptions.RestServiceException;
+import org.wsa.sjwsa.*;
+import org.wsa.sjwsa.exceptions.RestServiceException;
 
 public class NonQueryExample {
 
-    public Command getCommand1()
-    {
+    public Command getCommand1() {
         return this.getCommandEx1();
     }
 
-    public CommandEx getCommandEx1()
-    {
+    public CommandEx getCommandEx1() {
         CommandEx command = new CommandEx("companymanager_updatecompany");
         command.getParameters().add("_companyid", PgsqlDbType.Integer, 1622);
         command.getParameters().add("_companyname", PgsqlDbType.Varchar).setValue("reseller4");
@@ -44,10 +42,10 @@ public class NonQueryExample {
         command.getParameters().add("_authorizationrequired", PgsqlDbType.Boolean, false, false);
         command.getParameters().add("_vatexempt", PgsqlDbType.Boolean).setValue(false);
         command.getParameters().add("_financialsid", PgsqlDbType.Integer, 0);
-        command.getParameters().add("_directorid", PgsqlDbType.Integer,0);
+        command.getParameters().add("_directorid", PgsqlDbType.Integer, 0);
         command.getParameters().add("_businessgroupid", PgsqlDbType.Integer, true).setValue(null);
-        command.getParameters().add("_addedclientids", PgsqlDbType.Integer , true).setValue(null);
-        command.getParameters().add("_deletedclientids", PgsqlDbType.Integer, true ).setValue(new int[]{});
+        command.getParameters().add("_addedclientids", PgsqlDbType.Integer, true).setValue(null);
+        command.getParameters().add("_deletedclientids", PgsqlDbType.Integer, true).setValue(new int[]{});
         command.getParameters().add("_hasstock", PgsqlDbType.Boolean, false, false);
         command.getParameters().add("_iban", PgsqlDbType.Varchar, "");
         command.getParameters().add("_bic", PgsqlDbType.Varchar, "");
@@ -86,35 +84,33 @@ public class NonQueryExample {
         return command;
     }
 
-    public String runTest1()
-    {
+    public String runTest1() {
         Command command = this.getCommand1();
 
         try {
             String xmlResult = Command.execute(command,
                     RoutineType.NonQuery,
-                    HttpMethod.POST,
-                    ResponseFormat.JSON);
+                    HttpMethod.GET,
+                    ResponseFormat.XML,
+                    CompressionType.NONE,
+                    CompressionType.NONE);
             System.out.println(xmlResult);
 
             return xmlResult;
-        } catch (RestServiceException ex){
-            System.out.println("code: "+ex.getCode()+", message: "+ex.getMessage());
-        }
-        catch(Exception ex){
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
         return null;
     }
 
-    public Command getCommand2()
-    {
+    public Command getCommand2() {
         return this.getCommandEx2();
     }
 
-    public CommandEx getCommandEx2()
-    {
+    public CommandEx getCommandEx2() {
         CommandEx command = new CommandEx("brandmanager_hidebrand");
         command.getParameters().add("_brandid", PgsqlDbType.Integer, 13);
         command.getParameters().add("_ishidden", PgsqlDbType.Boolean).setValue(false);
@@ -126,8 +122,7 @@ public class NonQueryExample {
         return command;
     }
 
-    public String runTest2()
-    {
+    public String runTest2() {
         Command command = this.getCommand2();
 
         try {
@@ -138,10 +133,9 @@ public class NonQueryExample {
             System.out.println(xmlResult);
 
             return xmlResult;
-        } catch (RestServiceException ex){
-            System.out.println("code: "+ex.getCode()+", message: "+ex.getMessage());
-        }
-        catch(Exception ex){
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
@@ -171,13 +165,37 @@ public class NonQueryExample {
 
             System.out.println(xmlResult);
             return xmlResult;
-        } catch (RestServiceException ex){
-            System.out.println("code: "+ex.getCode()+", message: "+ex.getMessage());
-        }
-        catch(Exception ex){
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
         return null;
+    }
+
+    public void exampleForReadme() {
+        Command command = new Command("brandmanager_hidebrand");
+        command.getParameters().add("_brandid", PgsqlDbType.Integer, 13);
+        command.getParameters().add("_ishidden", PgsqlDbType.Boolean).setValue(false);
+
+        // out parameter
+        command.getParameters().add("_returnvalue", PgsqlDbType.Integer);
+
+        command.setOutgoingEncodingType(EncodingType.BASE64);
+
+        try {
+            String xmlResult = Command.execute(command,
+                    RoutineType.NonQuery,
+                    HttpMethod.POST,
+                    ResponseFormat.JSON,
+                    CompressionType.NONE,
+                    CompressionType.NONE);
+            System.out.println(xmlResult);
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -1,19 +1,17 @@
-import jwsa.*;
-import jwsa.exceptions.RestServiceException;
+import org.wsa.sjwsa.*;
+import org.wsa.sjwsa.exceptions.RestServiceException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ScalarExample {
-    public Command getCommand1()
-    {
+    public Command getCommand1() {
         return this.getCommandEx1();
     }
 
-    public CommandEx getCommandEx1()
-    {
+    public CommandEx getCommandEx1() {
         CommandEx command = new CommandEx("vehiclemanager_vehicle_upsert");
-        command.getParameters().add("_id", PgsqlDbType.Integer,  61);
+        command.getParameters().add("_id", PgsqlDbType.Integer, 61);
         command.getParameters().add("_addressid", PgsqlDbType.Integer, 4357);
         command.getParameters().add("_businessid", PgsqlDbType.Integer, 941);
         command.getParameters().add("_vehicletypeid", PgsqlDbType.Integer, 2);
@@ -41,8 +39,8 @@ public class ScalarExample {
 
         return command;
     }
-    public String runTest1()
-    {
+
+    public String runTest1() {
         Command command = this.getCommand1();
 
         try {
@@ -54,23 +52,20 @@ public class ScalarExample {
                     CompressionType.NONE);
             System.out.println(xmlResult);
 
-        } catch (RestServiceException ex){
-            System.out.println("code: "+ex.getCode()+", message: "+ex.getMessage());
-        }
-        catch(Exception ex){
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
         return null;
     }
 
-    public Command getCommand2()
-    {
+    public Command getCommand2() {
         return this.getCommandEx2();
     }
 
-    public CommandEx getCommandEx2()
-    {
+    public CommandEx getCommandEx2() {
         CommandEx command = new CommandEx("clientmanager_findclientbyemailbusiness");
         command.getParameters().add("_businessid", PgsqlDbType.Integer).setValue(1);
         command.getParameters().add("_email", PgsqlDbType.Text).setValue("femkedijkema@hotmail.com");
@@ -82,24 +77,22 @@ public class ScalarExample {
         return command;
     }
 
-    public String runTest2()
-    {
+    public String runTest2() {
         Command command = this.getCommand2();
 
         try {
             String xmlResult = Command.execute(command,
                     RoutineType.Scalar,
-                    HttpMethod.GET,
+                    HttpMethod.POST,
                     ResponseFormat.JSON,
-                    CompressionType.NONE,
-                    CompressionType.NONE);
+                    CompressionType.GZip,
+                    CompressionType.GZip);
             System.out.println(xmlResult);
 
             return xmlResult;
-        } catch (RestServiceException ex){
-            System.out.println("code: "+ex.getCode()+", message: "+ex.getMessage());
-        }
-        catch(Exception ex){
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println(ex.toString());
         }
 
@@ -125,5 +118,39 @@ public class ScalarExample {
         }
 
         return null;
+    }
+
+    public void exampleForReadme() {
+        Command command = new Command("clientmanager_findclientbyemailbusiness");
+        command.getParameters().add("_businessid", PgsqlDbType.Integer).setValue(1);
+        command.getParameters().add("_email", PgsqlDbType.Text).setValue("femkedijkema@hotmail.com");
+        command.getParameters().add("_personid", PgsqlDbType.Integer).setValue(3);
+
+        // the HTTP GET is default
+        command.setHttpMethod(HttpMethod.GET);
+
+        // a result in the JSON format is default
+        command.setResponseFormat(ResponseFormat.JSON);
+
+        // specifies the text-based data be encoded before sending,
+        // the default is EncodingType.NONE, i.e. sends as is
+        command.setOutgoingEncodingType(EncodingType.NONE);
+
+        // allows compressing data in the HTTP POST before sending,
+        // the default is CompressionType.NONE, i.e. as is
+        command.setOutgoingCompressionType(CompressionType.NONE);
+
+        // requires responding data be compressed,
+        // the default is CompressionType.NONE, i.e. as is
+        command.setReturnCompressionType(CompressionType.NONE);
+
+        try {
+            String xmlResult = Command.execute(command, RoutineType.Scalar);
+            System.out.println(xmlResult);
+        } catch (RestServiceException ex) {
+            System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
