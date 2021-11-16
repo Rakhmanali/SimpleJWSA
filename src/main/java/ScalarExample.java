@@ -145,8 +145,9 @@ public class ScalarExample {
         command.setReturnCompressionType(CompressionType.NONE);
 
         try {
-            String xmlResult = Command.execute(command, RoutineType.Scalar);
-            System.out.println(xmlResult);
+            String result = Command.execute(command, RoutineType.Scalar);
+
+            System.out.println(result);
         } catch (RestServiceException ex) {
             System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
         } catch (Exception ex) {

@@ -32,28 +32,6 @@ public class CommandEx extends Command {
 
     private final static String postFormat = "%s%sexecutemixpost?token=%s&compression=%s";
 
-//    public static String ExecuteAll(List<CommandEx> commandExs) throws Exception {
-//        return ExecuteAll(commandExs, ResponseFormat.JSON, CompressionType.NONE, CompressionType.NONE, ParallelExecution.TRUE);
-//    }
-//
-//    public static String ExecuteAll(List<CommandEx> commandExs,
-//                                    ResponseFormat responseFormat) throws Exception {
-//        return ExecuteAll(commandExs, responseFormat, CompressionType.NONE, CompressionType.NONE, ParallelExecution.TRUE);
-//    }
-//
-//    public static String ExecuteAll(List<CommandEx> commandExs,
-//                                    ResponseFormat responseFormat,
-//                                    CompressionType outgoingCompressionType) throws Exception {
-//        return ExecuteAll(commandExs, responseFormat, outgoingCompressionType, CompressionType.NONE, ParallelExecution.TRUE);
-//    }
-//
-//    public static String ExecuteAll(List<CommandEx> commandExs,
-//                                    ResponseFormat responseFormat,
-//                                    CompressionType outgoingCompressionType,
-//                                    CompressionType returnCompressionType) throws Exception {
-//        return ExecuteAll(commandExs, responseFormat, outgoingCompressionType, returnCompressionType, ParallelExecution.TRUE);
-//    }
-
     public static String ExecuteAll(List<CommandEx> commandExs,
                                     ResponseFormat responseFormat,
                                     CompressionType outgoingCompressionType,
@@ -72,22 +50,11 @@ public class CommandEx extends Command {
         var routinesElement = xmlRequestDocument.createElement(Constants.WS_XML_REQUEST_NODE_ROUTINES);
         xmlRequestDocument.appendChild(routinesElement);
 
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("<" + Constants.WS_XML_REQUEST_NODE_ROUTINES + ">");
-//        for (CommandEx commandEx : commandExs) {
-//            Request request = new Request(commandEx, convertingService);
-//            sb.append(request.createXmlRoutine(commandEx.getRoutineType()));
-//        }
-
         for (CommandEx commandEx : commandExs) {
             Request request = new Request(commandEx, convertingService);
             request.createXmlRoutine(xmlRequestDocument, commandEx.getRoutineType());
         }
 
-
-        //createRoutinesLevelXmlNodes(sb, returnCompressionType, parallelExecution, responseFormat);
-//        sb.append("</" + Constants.WS_XML_REQUEST_NODE_ROUTINES + ">");
-//        String requestString = sb.toString();
         createRoutinesLevelXmlNodes(xmlRequestDocument, returnCompressionType, parallelExecution, responseFormat);
 
         var domSource = new DOMSource(xmlRequestDocument);

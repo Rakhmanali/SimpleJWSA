@@ -201,9 +201,10 @@ public class DataSetExample {
 
         command.setHttpMethod(HttpMethod.GET);
         try {
-            String xmlResult = Command.execute(command,
+            String result = Command.execute(command,
                     RoutineType.DataSet);
-            System.out.println(xmlResult);
+
+            System.out.println(result);
         } catch (RestServiceException ex) {
             System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
         } catch (Exception ex) {
@@ -228,13 +229,14 @@ public class DataSetExample {
         command2.setWriteSchema(WriteSchema.TRUE);
 
         try {
-            String xmlResult = Command.ExecuteAll(Arrays.asList(command1, command2),
+            String result = Command.ExecuteAll(Arrays.asList(command1, command2),
                     RoutineType.DataSet,
                     ResponseFormat.XML,
                     CompressionType.NONE,
                     CompressionType.GZip,
                     ParallelExecution.TRUE);
-            System.out.println(xmlResult);
+
+            System.out.println(result);
         } catch (RestServiceException ex) {
             System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
         } catch (Exception ex) {

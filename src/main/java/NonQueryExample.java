@@ -185,13 +185,14 @@ public class NonQueryExample {
         command.setOutgoingEncodingType(EncodingType.BASE64);
 
         try {
-            String xmlResult = Command.execute(command,
+            String result = Command.execute(command,
                     RoutineType.NonQuery,
                     HttpMethod.POST,
                     ResponseFormat.JSON,
                     CompressionType.NONE,
                     CompressionType.NONE);
-            System.out.println(xmlResult);
+
+            System.out.println(result);
         } catch (RestServiceException ex) {
             System.out.println("code: " + ex.getCode() + ", message: " + ex.getMessage());
         } catch (Exception ex) {
